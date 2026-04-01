@@ -11,17 +11,19 @@ function App() {
   return (
     <div className="app-shell">
       <Navbar />
-      <main className="page-container">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/eda" element={<EDA />} />
-          <Route path="/model-comparison" element={<ModelComparison />} />
-          <Route path="/feature-importance" element={<FeatureImportance />} />
-          <Route path="/predict" element={<Predict />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </main>
-      <Footer />
+      <div className="main-content">
+        <main className="page-container">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/eda" element={<EDA />} />
+            <Route path="/model-comparison" element={<ModelComparison />} />
+            <Route path="/feature-importance" element={<FeatureImportance />} />
+            <Route path="/predict" element={<Predict />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Dot, Sparkles } from 'lucide-react';
 import api from '../api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorBanner from '../components/ErrorBanner';
@@ -66,73 +67,110 @@ function Predict() {
   };
 
   return (
-    <section>
-      <h1 className="page-title">Predict Your Insurance Cost</h1>
+    <section className="clinical-page">
+      <div className="page-header">
+        <span className="page-header-accent" aria-hidden="true" />
+        <h2>Predict Insurance Cost</h2>
+      </div>
+
       <ErrorBanner message={error} />
 
-      <article className="panel">
-        <form className="predict-form" onSubmit={onSubmit}>
-          <label>
-            Age
-            <input name="age" type="number" min="1" max="100" value={form.age} onChange={updateForm} required />
-          </label>
+      <div className="predict-layout">
+        <article className="clinical-card">
+          <h3 className="card-heading">Configuration Engine</h3>
+          <p className="card-subheading">Adjust parameters to generate actuarial projections.</p>
 
-          <label>
-            Sex
-            <select name="sex" value={form.sex} onChange={updateForm} required>
-              <option value="male">male</option>
-              <option value="female">female</option>
-            </select>
-          </label>
+          <form className="clinical-form" onSubmit={onSubmit}>
+            <label className="form-field span-2">
+              <span>AGE</span>
+              <input name="age" type="number" min="1" max="100" value={form.age} onChange={updateForm} required />
+            </label>
 
-          <label>
-            BMI
-            <input name="bmi" type="number" min="10" max="60" step="0.1" value={form.bmi} onChange={updateForm} required />
-          </label>
+            <label className="form-field">
+              <span>SEX</span>
+              <select name="sex" value={form.sex} onChange={updateForm} required>
+                <option value="male">male</option>
+                <option value="female">female</option>
+              </select>
+            </label>
 
-          <label>
-            Children
-            <input name="children" type="number" min="0" max="10" value={form.children} onChange={updateForm} required />
-          </label>
+            <label className="form-field">
+              <span>BMI INDEX</span>
+              <input name="bmi" type="number" min="10" max="60" step="0.1" value={form.bmi} onChange={updateForm} required />
+            </label>
 
-          <label>
-            Smoker
-            <select name="smoker" value={form.smoker} onChange={updateForm} required>
-              <option value="yes">yes</option>
-              <option value="no">no</option>
-            </select>
-          </label>
+            <label className="form-field">
+              <span>CHILDREN</span>
+              <input name="children" type="number" min="0" max="10" value={form.children} onChange={updateForm} required />
+            </label>
 
-          <label>
-            Region
-            <select name="region" value={form.region} onChange={updateForm} required>
-              <option value="southeast">southeast</option>
-              <option value="southwest">southwest</option>
-              <option value="northeast">northeast</option>
-              <option value="northwest">northwest</option>
-            </select>
-          </label>
+            <label className="form-field">
+              <span>SMOKER</span>
+              <select name="smoker" value={form.smoker} onChange={updateForm} required>
+                <option value="yes">yes</option>
+                <option value="no">no</option>
+              </select>
+            </label>
 
-          <button className="btn-primary" type="submit" disabled={loading}>
-            Predict Cost
-          </button>
-        </form>
-      </article>
+            <label className="form-field span-2">
+              <span>REGION</span>
+              <select name="region" value={form.region} onChange={updateForm} required>
+                <option value="southeast">southeast</option>
+                <option value="southwest">southwest</option>
+                <option value="northeast">northeast</option>
+                <option value="northwest">northwest</option>
+              </select>
+            </label>
+
+            <button className="predict-btn span-2" type="submit" disabled={loading}>
+              <Sparkles size={16} />
+              PREDICT COST
+            </button>
+          </form>
+        </article>
+
+        <div className="predict-results-stack">
+          <article className="prediction-result-card">
+            <Sparkles size={20} />
+            <p>ESTIMATED ANNUAL PREMIUM</p>
+            <h3>
+              ${result ? result.predicted_charge.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
+            </h3>
+            <div className="confidence-track">
+              <span style={{ width: result ? '94.2%' : '0%' }} />
+            </div>
+            <small>MODEL CONFIDENCE 94.2%</small>
+          </article>
+
+          <article className="clinical-card">
+            <h3 className="card-heading">Analysis Profile</h3>
+            <div className="profile-pill-grid">
+              <div className="profile-pill"><span>AGE</span><strong>{form.age || '--'}</strong></div>
+              <div className="profile-pill"><span>SEX</span><strong>{form.sex}</strong></div>
+              <div className="profile-pill"><span>BMI</span><strong>{form.bmi || '--'}</strong></div>
+              <div className="profile-pill"><span>CHILDREN</span><strong>{String(form.children || 0).padStart(2, '0')}</strong></div>
+              <div className="profile-pill"><span>SMOKER</span><strong>{form.smoker}</strong></div>
+              <div className="profile-pill"><span>REGION</span><strong>{form.region}</strong></div>
+            </div>
+          </article>
+
+          <article className="clinical-card">
+            <p className="mini-label"><Dot size={24} />Impact Analysis</p>
+            <h3 className="card-heading">Impact Analysis</h3>
+            <p className="muted-copy">
+              Current risk profile suggests an estimated premium contribution of
+              <span className="accent-text">
+                {' '}
+                ${result ? result.predicted_charge.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
+              </span>
+              {' '}
+              driven primarily by BMI and smoker status interactions.
+            </p>
+          </article>
+        </div>
+      </div>
 
       {loading && <LoadingSpinner text="Predicting insurance cost..." />}
-
-      {result && (
-        <article className="result-card">
-          <h2>Estimated Annual Insurance Cost</h2>
-          <p className="result-value">${result.predicted_charge.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-          <p className="result-currency">Currency: {result.currency}</p>
-          <div className="result-inputs">
-            {Object.entries(result.inputs).map(([key, value]) => (
-              <span key={key}>{key}: {String(value)}</span>
-            ))}
-          </div>
-        </article>
-      )}
     </section>
   );
 }

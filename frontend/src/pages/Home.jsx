@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { ArrowRightLeft, Binary, BrainCircuit, Database, Microscope } from 'lucide-react';
 import api from '../api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorBanner from '../components/ErrorBanner';
 import MetricCard from '../components/MetricCard';
 
 const BEST_MODEL = {
-  r2: 0.956,
-  rmse: 2601
+  r2: 0.8805,
+  rmse: 4306
 };
 
 function Home() {
@@ -33,37 +34,82 @@ function Home() {
   }, []);
 
   return (
-    <section>
-      <h1 className="page-title">Insurance Cost Predictor</h1>
-      <p className="page-subtitle">NIBM HNDSE25.1F/KU | Machine Learning CW1</p>
+    <section className="clinical-page">
+      <h1 className="hero-title">Insurance Cost Predictor</h1>
+      <p className="hero-kicker">NIBM HNDSE25.1F/KU | Machine Learning CW1</p>
+      <p className="hero-description">
+        Intelligent actuarial analytics pipeline for population-scale medical premium forecasting,
+        model governance, and prediction explainability.
+      </p>
 
       <ErrorBanner message={error} />
       {loading ? (
         <LoadingSpinner text="Loading dashboard metrics..." />
       ) : (
-        <div className="metric-grid">
-          <MetricCard label="Total Records" value={overview?.total_rows ?? '-'} />
-          <MetricCard label="Total Features" value={overview?.total_columns ?? '-'} />
-          <MetricCard label="Best Model R²" value={BEST_MODEL.r2.toFixed(3)} />
-          <MetricCard label="Best Model RMSE" value={`$${BEST_MODEL.rmse.toLocaleString()}`} />
+        <div className="dashboard-metric-grid">
+          <MetricCard
+            label="TOTAL RECORDS"
+            value={overview?.total_rows ?? '-'}
+            icon={<Database size={14} />}
+            subtitle="SYNTHETIC DATASET"
+          />
+          <MetricCard
+            label="TOTAL FEATURES"
+            value={overview?.total_columns ?? '-'}
+            icon={<Binary size={14} />}
+            subtitle="ENGINEERED ATTRIBUTES"
+          />
+          <MetricCard
+            label="BEST MODEL R²"
+            value={BEST_MODEL.r2.toFixed(4)}
+            icon={<BrainCircuit size={14} />}
+            subtitle="GENERALIZATION INDEX"
+          />
+          <MetricCard
+            label="BEST RMSE"
+            value={`$${BEST_MODEL.rmse.toLocaleString()}`}
+            icon={<Microscope size={14} />}
+            subtitle="VALIDATION ERROR"
+          />
         </div>
       )}
 
-      <article className="panel">
-        <h2>Project Overview</h2>
-        <p>
-          This dashboard presents a full machine learning workflow for predicting annual medical
-          insurance costs using demographic and health-related attributes. It includes dataset
-          exploration, model performance comparison, feature importance from Random Forest, and
-          real-time prediction through a Flask API.
-        </p>
+      <article className="workflow-panel">
+        <span className="outline-badge">SYSTEM INTELLIGENCE</span>
+        <div className="workflow-content">
+          <div>
+            <h2>Comprehensive Analytical Workflow</h2>
+            <p>
+              Move from statistical profiling to model benchmarking, interpretability diagnostics,
+              and live premium simulation through a unified clinical decision interface.
+            </p>
+          </div>
+          <div className="bar-decor" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
       </article>
 
-      <div className="quick-nav">
-        <Link to="/eda" className="btn-primary">Go to EDA</Link>
-        <Link to="/model-comparison" className="btn-primary">Model Comparison</Link>
-        <Link to="/feature-importance" className="btn-primary">Feature Importance</Link>
-        <Link to="/predict" className="btn-primary">Predict Cost</Link>
+      <div className="dashboard-nav-grid">
+        <Link to="/eda" className="dashboard-nav-card">
+          <FlaskConical size={18} />
+          <span>EDA</span>
+        </Link>
+        <Link to="/model-comparison" className="dashboard-nav-card">
+          <ArrowRightLeft size={18} />
+          <span>Comparison</span>
+        </Link>
+        <Link to="/feature-importance" className="dashboard-nav-card">
+          <BrainCircuit size={18} />
+          <span>Importance</span>
+        </Link>
+        <Link to="/predict" className="dashboard-nav-card">
+          <Microscope size={18} />
+          <span>Predict</span>
+        </Link>
       </div>
     </section>
   );
