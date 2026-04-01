@@ -13,6 +13,14 @@ const initialForm = {
   region: 'southeast'
 };
 
+const formatLkr = (value) =>
+  new Intl.NumberFormat('en-LK', {
+    style: 'currency',
+    currency: 'LKR',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(Number(value) || 0);
+
 function Predict() {
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
@@ -134,7 +142,7 @@ function Predict() {
             <Sparkles size={20} />
             <p>ESTIMATED ANNUAL PREMIUM</p>
             <h3>
-              ${result ? result.predicted_charge.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
+              {result ? formatLkr(result.predicted_charge) : formatLkr(0)}
             </h3>
             <div className="confidence-track">
               <span style={{ width: result ? '94.2%' : '0%' }} />
@@ -161,7 +169,7 @@ function Predict() {
               Current risk profile suggests an estimated premium contribution of
               <span className="accent-text">
                 {' '}
-                ${result ? result.predicted_charge.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
+                {result ? formatLkr(result.predicted_charge) : formatLkr(0)}
               </span>
               {' '}
               driven primarily by BMI and smoker status interactions.

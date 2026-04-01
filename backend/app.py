@@ -234,7 +234,7 @@ def predict():
         return jsonify(
             {
                 'predicted_charge': round(prediction, 2),
-                'currency': 'USD',
+                'currency': 'LKR',
                 'inputs': {
                     'age': age,
                     'sex': sex,

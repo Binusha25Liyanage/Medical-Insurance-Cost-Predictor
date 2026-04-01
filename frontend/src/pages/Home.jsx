@@ -11,6 +11,13 @@ const BEST_MODEL = {
   rmse: 4306
 };
 
+const formatLkr = (value) =>
+  new Intl.NumberFormat('en-LK', {
+    style: 'currency',
+    currency: 'LKR',
+    maximumFractionDigits: 0
+  }).format(Number(value) || 0);
+
 function Home() {
   const [overview, setOverview] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -67,7 +74,7 @@ function Home() {
           />
           <MetricCard
             label="BEST RMSE"
-            value={`$${BEST_MODEL.rmse.toLocaleString()}`}
+            value={formatLkr(BEST_MODEL.rmse)}
             icon={<Microscope size={14} />}
             subtitle="VALIDATION ERROR"
           />

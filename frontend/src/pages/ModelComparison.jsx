@@ -13,6 +13,14 @@ import api from '../api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorBanner from '../components/ErrorBanner';
 
+const formatLkr = (value) =>
+  new Intl.NumberFormat('en-LK', {
+    style: 'currency',
+    currency: 'LKR',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(Number(value) || 0);
+
 function ModelComparison() {
   const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -88,8 +96,8 @@ function ModelComparison() {
                         className={row.model === bestModel?.model ? 'best-row' : index % 2 === 0 ? 'row-even' : 'row-odd'}
                       >
                         <td>{row.model}</td>
-                        <td>{row.rmse.toFixed(2)}</td>
-                        <td>{row.mae.toFixed(2)}</td>
+                        <td>{formatLkr(row.rmse)}</td>
+                        <td>{formatLkr(row.mae)}</td>
                         <td>{row.r2.toFixed(3)}</td>
                         <td>{row.cv_r2.toFixed(3)}</td>
                       </tr>
